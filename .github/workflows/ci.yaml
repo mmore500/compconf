@@ -53,11 +53,11 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip setuptools
-        python -m pip install -r requirements-dev/py310/requirements-testing.txt
+        python -m pip install -r requirements.txt
     - name: Test isort tidyness
       uses: jamescurtin/isort-action@master
       with:
-          requirementsFiles: "requirements-dev/py310/requirements-testing.txt"
+          requirementsFiles: "requirements.txt"
     - name: Test Black tidyness
       uses: psf/black@27d20144a7517594e24a1649451177b2a11284be
       with:
@@ -92,7 +92,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install --upgrade uv
-          uv pip install -r test/requirements.txt --system
+          uv pip install -r requirements.txt --system
 
       - name: Install Nix
         uses: cachix/install-nix-action@v25
@@ -169,7 +169,6 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip setuptools
-        python -m pip install -r requirements-dev/py310/requirements-release.txt
     - uses: actions/download-artifact@v4
       with:
         # unpacks default artifact into dist/
