@@ -64,7 +64,6 @@ jobs:
           version: "22.10.0"
 
   test:
-    name: Build and test
     runs-on: ubuntu-latest
     env:
       CSLC: cslc
