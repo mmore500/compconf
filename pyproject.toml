@@ -16,11 +16,11 @@ classifiers = [
 dependencies = [
   "jq",
 ]
-description = "conftime enables flexible, type-rich comptime configuration of Cerebras Software Language (CSL) projects"
+description = "compconf enables flexible, type-rich comptime configuration of Cerebras Software Language (CSL) projects"
 license = {text = "MIT license"}
-name  =  "conftime"
+name  =  "compconf"
 keywords = [
-  "conftime",
+  "compconf",
 ]
 requires-python = ">=3.10"
 version = "0.1.2"
@@ -30,9 +30,9 @@ file = "README.md"
 content-type = "text/markdown"
 
 [project.urls]
-homepage = "https://github.com/mmore500/conftime"
-# documentation = "https://conftime.readthedocs.io"
-repository = "https://github.com/mmore500/conftime.git"
+homepage = "https://github.com/mmore500/compconf"
+# documentation = "https://compconf.readthedocs.io"
+repository = "https://github.com/mmore500/compconf.git"
 
 # adapted from https://tox.wiki/en/latest/example/package.html
 [build-system]
