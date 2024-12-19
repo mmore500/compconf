@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-uv pip compile pyproject.toml
+uv pip compile pyproject.toml | tee requirements.txt
