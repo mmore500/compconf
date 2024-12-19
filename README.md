@@ -43,21 +43,24 @@ fn get_value_or(
 
 Available options:
 ```
-usage: __main__.py [-h] [--compconf-cslc compconf_CSLC] [--compconf-data compconf_DATA]
-                   [--compconf-jq compconf_JQ] [--compconf-verbose]
+usage: __main__.py [-h] [--compconf-cslc COMPCONF_CSLC] [--compconf-data COMPCONF_DATA] [--compconf-jq COMPCONF_JQ] [--compconf-verbose]
 
-compconf enables flexible, type-rich comptime configuration of csl projects
+compconf enables flexible, type-rich comptime configuration of csl projects.
 
 options:
   -h, --help            show this help message and exit
-  --compconf-cslc compconf_CSLC
+  --compconf-cslc COMPCONF_CSLC
                         compiler command to run
-  --compconf-data compconf_DATA
+  --compconf-data COMPCONF_DATA
                         json data file to read, if any
-  --compconf-jq compconf_JQ
+  --compconf-jq COMPCONF_JQ
                         jq command to add/modify data (e.g., '. += {"foo:u32": 42}')
   --compconf-verbose    enable verbose logging
-```
+
+JSON data must be formatted according to `@import_comptime_value` conventions. See <https://sdk.cerebras.net/csl/language/builtins#import-comptime-value> DISCLAIMER: Cerebras Software
+Language is the intellectual property of Cerebras Systems, Inc. This project is not an official Cerebras project and is not affiliated with or endorsed by Cerebras Systems, Inc. in any
+way. All trademarks, logos, and intellectual property associated with Cerebras Systems remain the exclusive property of Cerebras Systems, Inc.
+
 
 ## Installation
 
