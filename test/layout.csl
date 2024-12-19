@@ -1,0 +1,22 @@
+const nCol = 1;
+const nRow = 1;
+
+const LAUNCH: color = @get_color(9);
+
+const memcpy = @import_module("<memcpy/get_params>", .{
+  .width = nCol,
+  .height = nRow,
+  .LAUNCH = LAUNCH
+});
+
+layout {
+  @set_rectangle(nCol, nRow);
+  @set_tile_code(
+    0, 0,
+    "kernel.csl",
+    .{ .memcpy_params = memcpy.get_params(0) },
+  );
+
+  @export_name("x", [*]u32, true);
+  @export_name("y", [*]f32, true);
+}

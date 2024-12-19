@@ -1,0 +1,17 @@
+param memcpy_params: comptime_struct;
+
+const memcpy = @import_module("<memcpy/memcpy>", memcpy_params);
+
+const compconf = @import_module("<compconf>");
+
+var x = [1]u32 {compconf.get_value("x", u32)};
+var ptr_x : [*]u32 = &x;
+
+var y = [1]f32 {compconf.get_value_or("y", @as(f32, 10.0))};
+var ptr_y : [*]f32 = &y;
+
+comptime {
+  @export_symbol(ptr_x, "x");
+  @export_symbol(ptr_y, "y");
+  @rpc(@get_data_task_id(memcpy.LAUNCH));
+}
