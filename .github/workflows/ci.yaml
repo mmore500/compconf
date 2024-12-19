@@ -15,7 +15,7 @@ on:
 jobs:
 
   requirements:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v3
@@ -31,7 +31,7 @@ jobs:
       - run: ./requirements.sh
 
   packaging:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python 3.10
@@ -43,7 +43,7 @@ jobs:
     - run: python3 -m compconf --help
 
   tidy:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python 3.10
@@ -158,7 +158,7 @@ jobs:
       - tidy
       - requirements
       - packaging
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python 3.10
