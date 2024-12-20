@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
 import argparse
+import itertools as it
 import json
 import logging
+import os
 import pathlib
 import subprocess
 import tempfile
@@ -39,6 +41,12 @@ def make_parser():
         "--compconf-verbose",
         action="store_true",
         help="enable verbose logging",
+    )
+    parser.add_argument(
+        "--import-path",
+        action="append",
+        default=[],
+        help="additional import paths for cslc",
     )
     return parser
 
@@ -112,11 +120,25 @@ if __name__ == "__main__":
             logging.info(f"{csl_source_content=}")
             source_file.write(csl_source_content)
 
+        import_paths = args.import_path + [tmpdir]
+        if "CSL_IMPORT_PATH" in os.environ:
+            import_paths += os.environ["CSL_IMPORT_PATH"].split(":")
+
+        import_paths = [*map(os.path.abspath, import_paths)]
+        logging.info(f"{import_paths=}")
+
+        import_path = ":".join(import_paths)
+        logging.info(f"{import_path=}")
+
+        os.environ["CSL_IMPORT_PATH"] = import_path
         subprocess.run(
             [
                 args.compconf_cslc,
-                "--import-path",
-                tmpdir,
+                *[
+                    item
+                    for pair in zip(it.repeat("--import-path"), import_paths)
+                    for item in pair
+                ],
                 *unknown_args,
             ],
             check=True,
