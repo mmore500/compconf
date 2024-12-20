@@ -6,6 +6,7 @@ import json
 import logging
 import os
 import pathlib
+import shutil
 import subprocess
 import tempfile
 
@@ -29,6 +30,12 @@ def make_parser():
         "--compconf-data",
         default="",
         help="json data file to read, if any",
+        type=str,
+    )
+    parser.add_argument(
+        "--compconf-dump",
+        default="confcomp.json",
+        help="path to dump the final json data",
         type=str,
     )
     parser.add_argument(
@@ -128,6 +135,9 @@ if __name__ == "__main__":
 
         with open(data_path, "w") as data_file:
             json.dump(data, data_file)
+
+        if args.compconf_dump:
+            shutil.copy(data_path, args.compconf_dump)
 
         with open(source_path, "w") as source_file:
             csl_source_content = make_csl_source(data_path)
