@@ -34,7 +34,7 @@ def make_parser():
     )
     parser.add_argument(
         "--compconf-dump",
-        default="confcomp.json",
+        default="compconf.json",
         help="path to dump the final json data",
         type=str,
     )
