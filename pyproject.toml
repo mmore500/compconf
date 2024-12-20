@@ -23,7 +23,7 @@ keywords = [
   "compconf",
 ]
 requires-python = ">=3.10"
-version = "0.2.1"
+version = "0.3.0"
 
 [project.readme]
 file = "README.md"
