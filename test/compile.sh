@@ -14,4 +14,6 @@ echo "CSLC ${CSLC}"
 # see https://sdk.cerebras.net/csl/tutorials/gemv-01-complete-program/
 # 8x3 because compiler says
 # RuntimeError: Fabric dimension must be at least 8-by-3
+
+export "COMPCONFENV_z__u32"=99
 python3 -m compconf --compconf-cslc "${CSLC}" --compconf-jq '. += {"x:u32": 42, "foobar:comptime_string": "buzz"}' --compconf-verbose ./test/layout.csl --fabric-dims=8,3 --fabric-offsets=4,1 --channels=1 --memcpy -o out

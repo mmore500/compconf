@@ -11,10 +11,14 @@ var ptr_x : [*]u32 = &x;
 var y = [1]f32 {compconf.get_value_or("y", @as(f32, 10.0))};
 var ptr_y : [*]f32 = &y;
 
+var z = [1]u32 {compconf_raw.z};
+var ptr_z : [*]u32 = &z;
+
 comptime {
   @comptime_assert(compconf.has_value("foobar"));
   @comptime_assert(compconf_raw.foobar == "buzz");
   @export_symbol(ptr_x, "x");
   @export_symbol(ptr_y, "y");
+  @export_symbol(ptr_z, "z");
   @rpc(@get_data_task_id(memcpy.LAUNCH));
 }

@@ -121,6 +121,18 @@ if __name__ == "__main__":
     data["_compconf_dummy:u32"] = 42  # ensure csl interprets as struct
     logging.info(f"after dummy {data=}")
 
+    for key, value in os.environ.items():
+        prefix = "COMPCONFENV_"
+        if key.startswith(prefix):
+            logging.info(f"found env var {key=} {value=}")
+            compconf_key = key.removeprefix(prefix).replace("__", ":")
+            try:
+                data[compconf_key] = json.loads(value)
+            except json.JSONDecodeError:
+                logging.warning(f"failed to parse {value=}, treating as string")
+                data[compconf_key] = value
+    logging.info(f"after env {data=}")
+
     for jq_command in args.compconf_jq:
         logging.info(f"{jq_command=}")
         jq_program = jq.compile(jq_command)

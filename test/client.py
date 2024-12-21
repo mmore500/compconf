@@ -54,6 +54,23 @@ runner.memcpy_d2h(
 assert mit.one(memcpy_view(y, np.dtype(np.float32))) == 10.0
 print("compconf.get_value_or ok")
 
+z = np.zeros(1, dtype=np.uint32)
+runner.memcpy_d2h(
+    z,
+    runner.get_id("z"),
+    0,  # x0
+    0,  # y0
+    nCol,  # width
+    nRow,  # height
+    1,  # num wavelets
+    streaming=False,
+    data_type=MemcpyDataType.MEMCPY_32BIT,
+    order=MemcpyOrder.ROW_MAJOR,
+    nonblock=False,
+)
+assert mit.one(memcpy_view(z, np.dtype(np.uint32))) == 99
+print("COMPCONFENV_ integration ok")
+
 runner.stop()
 
 print("test/client.py complete")
