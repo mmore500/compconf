@@ -12,10 +12,11 @@ import tempfile
 
 import jq
 
+
 # polyfill adapted from https://stackoverflow.com/a/16891418/17332200
 def _removeprefix(text: str, prefix: str) -> str:
     if text.startswith(prefix):
-        return text[len(prefix):]
+        return text[len(prefix) :]
     return text
 
 
