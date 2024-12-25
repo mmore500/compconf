@@ -12,6 +12,12 @@ import tempfile
 
 import jq
 
+# polyfill adapted from https://stackoverflow.com/a/16891418/17332200
+def _removeprefix(text: str, prefix: str) -> str:
+    if text.startswith(prefix):
+        return text[len(prefix):]
+    return text
+
 
 def make_parser():
     parser = argparse.ArgumentParser(
@@ -109,41 +115,45 @@ if __name__ == "__main__":
     if args.compconf_verbose:
         logging.basicConfig(level=logging.INFO, format="compconf %(message)s")
 
-    logging.info(f"{args=} {unknown_args=}")
+    logging.info(f"args={args} unknown_args={unknown_args}")
 
     data = (
         json.loads(pathlib.Path(args.compconf_data).read_text())
         if args.compconf_data
         else dict()
     )
-    logging.info(f"initial {data=}")
+    logging.info(f"initial data={data}")
 
     data["_compconf_dummy:u32"] = 42  # ensure csl interprets as struct
-    logging.info(f"after dummy {data=}")
+    logging.info(f"after dummy data={data}")
 
     for key, value in os.environ.items():
         prefix = "COMPCONFENV_"
         if key.startswith(prefix):
-            logging.info(f"found env var {key=} {value=}")
-            compconf_key = key.removeprefix(prefix).replace("__", ":")
+            logging.info(f"found env var key={key} value={value}")
+            compconf_key = _removeprefix(key, prefix).replace("__", ":")
             try:
                 data[compconf_key] = json.loads(value)
             except json.JSONDecodeError:
-                logging.warning(f"failed to parse {value=}, treating as string")
+                logging.warning(
+                    f"failed to parse value={value}, treating as string",
+                )
                 data[compconf_key] = value
-    logging.info(f"after env {data=}")
+    logging.info(f"after env data={data}")
 
     for jq_command in args.compconf_jq:
-        logging.info(f"{jq_command=}")
+        logging.info(f"jq_command={jq_command}")
         jq_program = jq.compile(jq_command)
         data = jq_program.input(data).first()
-        logging.info(f"after jq {data=}")
+        logging.info(f"after jq data={data}")
 
     with tempfile.TemporaryDirectory() as tmpdir:
         data_path = f"{tmpdir}/data.json"
         source_path = f"{tmpdir}/compconf.csl"
         raw_path = f"{tmpdir}/compconf_raw.csl"
-        logging.info(f"{tmpdir=} {data_path=} {source_path=}")
+        logging.info(
+            f"tmpdir={tmpdir} data_path={data_path} source_path={source_path}",
+        )
 
         with open(data_path, "w") as data_file:
             json.dump(data, data_file)
@@ -153,12 +163,12 @@ if __name__ == "__main__":
 
         with open(source_path, "w") as source_file:
             csl_source_content = make_csl_source(data_path)
-            logging.info(f"{csl_source_content=}")
+            logging.info(f"csl_source_content={csl_source_content}")
             source_file.write(csl_source_content)
 
         with open(raw_path, "w") as raw_file:
             csl_raw_content = make_csl_raw(data)
-            logging.info(f"{csl_raw_content=}")
+            logging.info(f"csl_raw_content={csl_raw_content}")
             raw_file.write(csl_raw_content)
 
         import_paths = args.import_path + [tmpdir]
@@ -166,10 +176,10 @@ if __name__ == "__main__":
             import_paths += os.environ["CSL_IMPORT_PATH"].split(":")
 
         import_paths = [*map(os.path.abspath, import_paths)]
-        logging.info(f"{import_paths=}")
+        logging.info(f"import_paths={import_paths}")
 
         import_path = ":".join(import_paths)
-        logging.info(f"{import_path=}")
+        logging.info(f"import_path={import_path}")
 
         os.environ["CSL_IMPORT_PATH"] = import_path
         subprocess.run(
