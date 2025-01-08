@@ -210,6 +210,6 @@ jobs:
           tags: ${{ env.TAGS }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          repository: mmore500/hstrat
+          repository: mmore500/compconf
           registry: ghcr.io
           add_git_labels: true
