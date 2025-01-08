@@ -62,6 +62,13 @@ Language is the intellectual property of Cerebras Systems, Inc. This project is 
 way. All trademarks, logos, and intellectual property associated with Cerebras Systems remain the exclusive property of Cerebras Systems, Inc.
 ```
 
+## Singularity Container
+
+A containerized release of `compconf` is available via <ghcr.io>
+
+```bash
+singularity exec docker://ghcr.io/mmore500/compconf:v0.5.0 python3 -m compconf --help
+```
 
 ## Installation
 
