@@ -33,7 +33,7 @@ RUN python3 -m pip install uv --break-system-packages \
         -r /app/requirements.txt \
     && python3 -m uv pip install --system --break-system-packages "/app"
 
-# force cppimport build
+# Test
 RUN python3 -m compconf --help
 
 # Clean up
