@@ -10,11 +10,13 @@ RUN apt-get update \
         build-essential \
         cmake \
         gcc \
+        git \
         python3 \
         python3-dev \
         python3-pip \
         python3-venv \
         python3-wheel \
+        rsync \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
