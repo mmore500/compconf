@@ -67,7 +67,7 @@ way. All trademarks, logos, and intellectual property associated with Cerebras S
 A containerized release of `compconf` is available via <ghcr.io>
 
 ```bash
-singularity exec docker://ghcr.io/mmore500/compconf:v0.5.2 python3 -m compconf --help
+singularity exec docker://ghcr.io/mmore500/compconf:v0.5.3 python3 -m compconf --help
 ```
 
 ## Installation
