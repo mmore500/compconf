@@ -8,6 +8,7 @@ import os
 import pathlib
 import shutil
 import subprocess
+import sys
 import tempfile
 
 import jq
@@ -116,6 +117,8 @@ if __name__ == "__main__":
     if args.compconf_verbose:
         logging.basicConfig(level=logging.INFO, format="compconf %(message)s")
 
+    logging.info(f"{sys.executable=}")
+
     logging.info(f"args={args} unknown_args={unknown_args}")
 
     data = (
@@ -185,7 +188,15 @@ if __name__ == "__main__":
         os.environ["CSL_IMPORT_PATH"] = import_path
         subprocess.run(
             [
-                args.compconf_cslc,
+                *f"  {args.compconf_cslc} ".replace(
+                    "  python3 ",
+                    f"{sys.executable} ",
+                )
+                .replace(
+                    "  python ",
+                    f"{sys.executable} ",
+                )
+                .split(),
                 *[
                     item
                     for pair in zip(it.repeat("--import-path"), import_paths)
