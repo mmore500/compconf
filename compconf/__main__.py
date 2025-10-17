@@ -179,10 +179,14 @@ if __name__ == "__main__":
         if "CSL_IMPORT_PATH" in os.environ:
             import_paths += os.environ["CSL_IMPORT_PATH"].split(":")
 
-        cwd = os.getcwd()
+        reldir = os.getenv("COMPCONF_RELDIR", None)
+        logging.info(f"reldir={reldir}")
         import_paths = [
             f"./{os.path.relpath(p)}"
-            if os.path.commonpath([cwd, os.path.abspath(p)]) == cwd
+            if (
+                reldir is not None
+                and os.path.commonpath([reldir, os.path.abspath(p)]) == reldir
+            )
             else os.path.abspath(p)
             for p in import_paths
         ]
