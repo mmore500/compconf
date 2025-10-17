@@ -179,9 +179,12 @@ if __name__ == "__main__":
         if "CSL_IMPORT_PATH" in os.environ:
             import_paths += os.environ["CSL_IMPORT_PATH"].split(":")
 
+        cwd = os.getcwd()
         import_paths = [
-            *map(os.path.relpath, import_paths),
-            *map(os.path.abspath, import_paths),
+            os.path.relpath(p)
+            if os.path.commonpath([cwd, os.path.abspath(p)]) == cwd
+            else os.path.abspath(p)
+            for p in import_paths
         ]
         logging.info(f"import_paths={import_paths}")
 
