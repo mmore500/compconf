@@ -175,7 +175,7 @@ if __name__ == "__main__":
             logging.info(f"csl_raw_content={csl_raw_content}")
             raw_file.write(csl_raw_content)
 
-        import_paths = args.import_path + [tmpdir]
+        import_paths = ["/tmp", *args.import_path, tmpdir]
         if "CSL_IMPORT_PATH" in os.environ:
             import_paths += os.environ["CSL_IMPORT_PATH"].split(":")
 
