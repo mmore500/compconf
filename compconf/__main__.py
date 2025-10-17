@@ -181,7 +181,7 @@ if __name__ == "__main__":
 
         cwd = os.getcwd()
         import_paths = [
-            os.path.relpath(p)
+            f"./{os.path.relpath(p)}"
             if os.path.commonpath([cwd, os.path.abspath(p)]) == cwd
             else os.path.abspath(p)
             for p in import_paths
