@@ -179,7 +179,10 @@ if __name__ == "__main__":
         if "CSL_IMPORT_PATH" in os.environ:
             import_paths += os.environ["CSL_IMPORT_PATH"].split(":")
 
-        import_paths = [*map(os.path.abspath, import_paths)]
+        import_paths = [
+            *map(os.path.relpath, import_paths),
+            *map(os.path.abspath, import_paths),
+        ]
         logging.info(f"import_paths={import_paths}")
 
         import_path = ":".join(import_paths)
