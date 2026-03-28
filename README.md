@@ -5,6 +5,7 @@
 [
 ![PyPi](https://img.shields.io/pypi/v/compconf.svg)
 ](https://pypi.python.org/pypi/compconf)
+[![DOI](https://zenodo.org/badge/905963048.svg)](https://doi.org/10.5281/zenodo.19288520)
 
 compconf enables flexible, type-rich comptime configuration of Cerebras Software Language (CSL) projects
 
@@ -62,19 +63,33 @@ Language is the intellectual property of Cerebras Systems, Inc. This project is 
 way. All trademarks, logos, and intellectual property associated with Cerebras Systems remain the exclusive property of Cerebras Systems, Inc.
 ```
 
-## Singularity Container
-
-A containerized release of `compconf` is available via <ghcr.io>
-
-```bash
-singularity exec docker://ghcr.io/mmore500/compconf:v0.6.5 python3 -m compconf --help
-```
-
 ## Installation
 
 To install from PyPi with pip, run
 
-`python3 -m pip install compconf`
+```python3
+python3 -m pip install compconf
+```
+
+## Citing
+
+If compconf contributes to a scholarly work, please cite it as
+
+> Matthew Andres Moreno. (2026). mmore500/compconf. Zenodo. https://doi.org/10.5281/zenodo.19288520
+
+```bibtex
+@software{moreno2026compconf,
+  author = {Matthew Andres Moreno},
+  title = {mmore500/compconf},
+  month = mar,
+  year = 2026,
+  publisher = {Zenodo},
+  doi = {10.5281/zenodo.19288520},
+  url = {https://doi.org/10.5281/zenodo.19288520}
+}
+```
+
+And don't forget to leave a [star on GitHub](https://github.com/mmore500/compconf/stargazers)!
 
 ## Disclaimer
 
