@@ -1,12 +1,9 @@
 const nCol = 1;
 const nRow = 1;
 
-const LAUNCH: color = @get_color(9);
-
 const memcpy = @import_module("<memcpy/get_params>", .{
   .width = nCol,
   .height = nRow,
-  .LAUNCH = LAUNCH
 });
 
 layout {
@@ -20,4 +17,6 @@ layout {
   @export_name("x", [*]u32, true);
   @export_name("y", [*]f32, true);
   @export_name("z", [*]u32, true);
+  @export_name("arr", [*]u32, true);
+  @export_name("nested_a", [*]u32, true);
 }

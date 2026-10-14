@@ -63,6 +63,35 @@ jobs:
       with:
           version: "22.10.0"
 
+  pytest:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.8"
+          - "3.9"
+          - "3.10"
+          - "3.11"
+          - "3.12"
+          - "3.13"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt pytest
+
+      - name: Run pytest
+        run: python -m pytest test/pytest
+
   test:
     runs-on: ubuntu-22.04
     strategy:
@@ -126,7 +155,17 @@ jobs:
           apptainer --version
           sudo "$(which apptainer)" exec docker://busybox:latest echo "Hello from Singularity and Docker!"
 
-      - name: Set up SDK
+      - name: Cache Cerebras SDK
+        id: cache-sdk
+        uses: actions/cache@v4
+        with:
+          path: ~/cerebras/bin
+          key: cerebras-sdk-${{ github.repository }}-${{ secrets.CEREBRAS_SDK_VERSION }}
+          restore-keys: |
+            cerebras-sdk-${{ github.repository }}-${{ secrets.CEREBRAS_SDK_VERSION }}
+
+      - name: Download SDK
+        if: steps.cache-sdk.outputs.cache-hit != 'true'
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 15
@@ -134,9 +173,14 @@ jobs:
           command: |
             mkdir -p ~/cerebras/bin
             curl -L "${CEREBRAS_SDK_URL}" | tar -xzv -C ~/cerebras/bin
-            echo "$HOME/cerebras/bin" >> $GITHUB_PATH
+            ls ~/cerebras/bin
         env:
           CEREBRAS_SDK_URL: ${{ secrets.CEREBRAS_SDK_URL }}
+
+      - name: Set up SDK
+        run: |
+          ls ~/cerebras/bin
+          echo "$HOME/cerebras/bin" >> $GITHUB_PATH
 
       - run: |
           which cslc
@@ -153,7 +197,8 @@ jobs:
 
       - name: Compile test kernel
         run: |
-          sudo env PATH=$PATH CSLC=$CSLC ./test/compile.sh  >/dev/null 2>&1
+          sudo env PATH=$PATH CSLC=$CSLC ./test/compile.sh \
+            >compile.log 2>&1 || { tail -n 100 compile.log; exit 1; }
 
       - name: Execute test kernel
         run: |
@@ -164,6 +209,7 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
     needs:
       - test
+      - pytest
       - tidy
       - requirements
       - packaging

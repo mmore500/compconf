@@ -44,7 +44,8 @@ fn get_value_or(
 
 Available options:
 ```
-usage: __main__.py [-h] [--compconf-cslc COMPCONF_CSLC] [--compconf-data COMPCONF_DATA] [--compconf-jq COMPCONF_JQ] [--compconf-verbose]
+usage: __main__.py [-h] [--compconf-cslc COMPCONF_CSLC] [--compconf-data COMPCONF_DATA] [--compconf-dump COMPCONF_DUMP] [--compconf-jq COMPCONF_JQ] [--compconf-verbose]
+                   [--import-path IMPORT_PATH]
 
 compconf enables flexible, type-rich comptime configuration of csl projects.
 
@@ -54,13 +55,18 @@ options:
                         compiler command to run
   --compconf-data COMPCONF_DATA
                         json data file to read, if any
+  --compconf-dump COMPCONF_DUMP
+                        path to dump the final json data
   --compconf-jq COMPCONF_JQ
                         jq command to add/modify data (e.g., '. += {"foo:u32": 42}')
   --compconf-verbose    enable verbose logging
+  --import-path IMPORT_PATH
+                        additional import paths for cslc
 
-JSON data must be formatted according to `@import_comptime_value` conventions. See <https://sdk.cerebras.net/csl/language/builtins#import-comptime-value> DISCLAIMER: Cerebras Software
-Language is the intellectual property of Cerebras Systems, Inc. This project is not an official Cerebras project and is not affiliated with or endorsed by Cerebras Systems, Inc. in any
-way. All trademarks, logos, and intellectual property associated with Cerebras Systems remain the exclusive property of Cerebras Systems, Inc.
+JSON data must be formatted according to `@import_comptime_value` conventions from Cerebras SDK v1.X. See
+<https://web.archive.org/web/20260108221709/https://sdk.cerebras.net/csl/language/builtins#import-comptime-value>. Requires Cerebras SDK >= 2.10. DISCLAIMER: Cerebras Software
+Language is the intellectual property of Cerebras Systems, Inc. This project is not an official Cerebras project and is not affiliated with or endorsed by Cerebras Systems, Inc.
+in any way. All trademarks, logos, and intellectual property associated with Cerebras Systems remain the exclusive property of Cerebras Systems, Inc.
 ```
 
 ## Installation
