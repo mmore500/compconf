@@ -1,4 +1,0 @@
-layout {
-  @set_rectangle(1, 1);
-  @set_tile_code(0, 0, "kernel.csl");
-}

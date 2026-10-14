@@ -20,4 +20,6 @@ layout {
   @export_name("x", [*]u32, true);
   @export_name("y", [*]f32, true);
   @export_name("z", [*]u32, true);
+  @export_name("arr", [*]u32, true);
+  @export_name("nested_a", [*]u32, true);
 }

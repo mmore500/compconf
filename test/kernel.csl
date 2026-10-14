@@ -14,11 +14,22 @@ var ptr_y : [*]f32 = &y;
 var z = [1]u32 {compconf_raw.z};
 var ptr_z : [*]u32 = &z;
 
+const arr = compconf.get_value("arr", [3]u32);
+var arr_out = [3]u32 {arr[0], arr[1], arr[2]};
+var ptr_arr : [*]u32 = &arr_out;
+
+const nested = compconf.get_value("nested", @type_of(.{ .a = @as(u32, 0) }));
+var nested_a = [1]u32 {nested.a};
+var ptr_nested_a : [*]u32 = &nested_a;
+
 comptime {
   @comptime_assert(compconf.has_value("foobar"));
+  @comptime_assert(!compconf.has_value("nonexistent"));
   @comptime_assert(compconf_raw.foobar == "buzz");
   @export_symbol(ptr_x, "x");
   @export_symbol(ptr_y, "y");
   @export_symbol(ptr_z, "z");
+  @export_symbol(ptr_arr, "arr");
+  @export_symbol(ptr_nested_a, "nested_a");
   @rpc(@get_data_task_id(memcpy.LAUNCH));
 }

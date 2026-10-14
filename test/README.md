@@ -1,1 +1,1 @@
-written with Cerebras SDK v1.0.0
+requires Cerebras SDK >= 2.10 (CSL changes untested against a compiler as of writing)

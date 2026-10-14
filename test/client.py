@@ -71,6 +71,40 @@ runner.memcpy_d2h(
 assert mit.one(memcpy_view(z, np.dtype(np.uint32))) == 99
 print("COMPCONFENV_ integration ok")
 
+arr = np.zeros(3, dtype=np.uint32)
+runner.memcpy_d2h(
+    arr,
+    runner.get_id("arr"),
+    0,  # x0
+    0,  # y0
+    nCol,  # width
+    nRow,  # height
+    3,  # num wavelets
+    streaming=False,
+    data_type=MemcpyDataType.MEMCPY_32BIT,
+    order=MemcpyOrder.ROW_MAJOR,
+    nonblock=False,
+)
+assert list(memcpy_view(arr, np.dtype(np.uint32))) == [1, 2, 3]
+print("compconf array ok")
+
+nested_a = np.zeros(1, dtype=np.uint32)
+runner.memcpy_d2h(
+    nested_a,
+    runner.get_id("nested_a"),
+    0,  # x0
+    0,  # y0
+    nCol,  # width
+    nRow,  # height
+    1,  # num wavelets
+    streaming=False,
+    data_type=MemcpyDataType.MEMCPY_32BIT,
+    order=MemcpyOrder.ROW_MAJOR,
+    nonblock=False,
+)
+assert mit.one(memcpy_view(nested_a, np.dtype(np.uint32))) == 7
+print("compconf nested struct ok")
+
 runner.stop()
 
 print("test/client.py complete")
