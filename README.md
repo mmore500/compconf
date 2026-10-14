@@ -58,7 +58,7 @@ options:
                         jq command to add/modify data (e.g., '. += {"foo:u32": 42}')
   --compconf-verbose    enable verbose logging
 
-JSON data must be formatted according to `@import_comptime_value` conventions. See <https://sdk.cerebras.net/csl/language/builtins#import-comptime-value> DISCLAIMER: Cerebras Software
+JSON keys must be of the form "name:type" (e.g., "foo:u32", "bar:f32", "baz:bool", "qux:comptime_string"), mapping to a scalar value (int, float, bool, or string). Lists and nested objects are not supported. Requires Cerebras SDK >= 2.10. DISCLAIMER: Cerebras Software
 Language is the intellectual property of Cerebras Systems, Inc. This project is not an official Cerebras project and is not affiliated with or endorsed by Cerebras Systems, Inc. in any
 way. All trademarks, logos, and intellectual property associated with Cerebras Systems remain the exclusive property of Cerebras Systems, Inc.
 ```

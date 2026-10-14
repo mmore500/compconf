@@ -1,0 +1,9 @@
+const compconf = @import_module("<compconf>");
+
+comptime {
+  @comptime_assert(compconf.has_value("present"));
+  @comptime_assert(!compconf.has_value("missing"));
+  @comptime_assert(compconf.get_value("present", u32) == 7);
+  @comptime_assert(compconf.get_value_or("present", @as(u32, 1)) == 7);
+  @comptime_assert(compconf.get_value_or("missing", @as(u32, 5)) == 5);
+}
