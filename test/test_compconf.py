@@ -41,7 +41,7 @@ def test_make_csl_source_embeds_literal():
     )
 
 
-CSLC = os.environ.get("CSLC", os.path.expanduser("~/cerebras-2.10.0/cslc"))
+CSLC = os.environ.get("CSLC", "cslc")
 
 
 @pytest.mark.skipif(
