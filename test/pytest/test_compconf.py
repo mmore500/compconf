@@ -1,6 +1,10 @@
 import pytest
 
-from compconf.__main__ import make_csl_data_literal, make_csl_source
+from compconf.__main__ import (
+    make_csl_data_literal,
+    make_csl_raw,
+    make_csl_source,
+)
 
 
 def test_make_csl_data_literal():
@@ -55,3 +59,10 @@ def test_make_csl_source_embeds_literal():
     assert "const _data = .{ .a = @as(u32, 1) };" in make_csl_source(
         {"a:u32": 1},
     )
+
+
+def test_make_csl_raw_skips_non_scalars():
+    raw = make_csl_raw({"a:u32": 1, "arr:[2]u32": [1, 2], "n:x": {"b:u32": 2}})
+    assert "const a:u32 = 1;" in raw
+    assert "arr" not in raw
+    assert "n:x" not in raw

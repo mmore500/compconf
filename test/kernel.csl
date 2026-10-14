@@ -31,5 +31,4 @@ comptime {
   @export_symbol(ptr_z, "z");
   @export_symbol(ptr_arr, "arr");
   @export_symbol(ptr_nested_a, "nested_a");
-  @rpc(@get_data_task_id(memcpy.LAUNCH));
 }
