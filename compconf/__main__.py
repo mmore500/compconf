@@ -6,6 +6,7 @@ import json
 import logging
 import os
 import pathlib
+import re
 import shutil
 import subprocess
 import sys
@@ -66,26 +67,57 @@ def make_parser():
     return parser
 
 
+def _make_csl_scalar_literal(
+    key: str, type_: str, value, wrap: bool = True
+) -> str:
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, str):
+        return json.dumps(value)
+    if isinstance(value, (int, float)):
+        if not type_:
+            raise ValueError(f"key {key!r} needs a ':type' suffix")
+        if type_ == "color":
+            return f"@get_color({value!r})"
+        return f"@as({type_}, {value!r})" if wrap else repr(value)
+    raise ValueError(
+        f"unsupported value for key {key!r}: {type(value).__name__}",
+    )
+
+
 def make_csl_data_literal(data: dict) -> str:
     """Render data as a CSL anonymous struct literal.
 
-    Keys follow a "name:type" convention. Scalar values only.
+    Follows SDK v1.X `@import_comptime_value` conventions: keys are
+    "name:type"; scalars, one-dimensional arrays (type "[N]T"), and nested
+    objects are supported; null is an error.
     """
     fields = []
     for key, value in data.items():
         name, _, type_ = key.partition(":")
-        if isinstance(value, bool):
-            literal = "true" if value else "false"
-        elif isinstance(value, str):
-            literal = json.dumps(value)
-        elif isinstance(value, (int, float)):
-            if not type_:
-                raise ValueError(f"key {key!r} needs a ':type' suffix")
-            literal = f"@as({type_}, {value!r})"
-        else:
-            raise ValueError(
-                f"unsupported value for key {key!r}: {type(value).__name__}",
+        if isinstance(value, dict):
+            literal = make_csl_data_literal(value)
+        elif isinstance(value, list):
+            match = re.fullmatch(r"\[(\d+)\](\w+)", type_)
+            if match is None:
+                raise ValueError(
+                    f"array key {key!r} needs a sized type like ':[8]i16'",
+                )
+            size, elem_type = int(match[1]), match[2]
+            if len(value) != size:
+                raise ValueError(
+                    f"array key {key!r} has {len(value)} elements, "
+                    f"expected {size}",
+                )
+            if any(isinstance(v, (list, dict)) for v in value):
+                raise ValueError(f"array key {key!r} may not be nested")
+            elems = ", ".join(
+                _make_csl_scalar_literal(key, elem_type, v, wrap=False)
+                for v in value
             )
+            literal = f"[{size}]{elem_type} {{ {elems} }}"
+        else:
+            literal = _make_csl_scalar_literal(key, type_, value)
         fields.append(f".{name} = {literal}")
     return ".{ " + ", ".join(fields) + " }"
 

@@ -29,10 +29,32 @@ def test_make_csl_data_literal_float_and_false():
     )
 
 
-@pytest.mark.parametrize("value", [[1, 2], {"a": 1}, None])
-def test_make_csl_data_literal_unsupported(value):
+def test_make_csl_data_literal_array():
+    assert make_csl_data_literal({"arr:[3]i16": [1, -2, 3]}) == (
+        ".{ .arr = [3]i16 { 1, -2, 3 } }"
+    )
+
+
+def test_make_csl_data_literal_nested_and_color():
+    data = {"s:comptime_struct": {"a:u8": 1, "c:color": 4}}
+    assert make_csl_data_literal(data) == (
+        ".{ .s = .{ .a = @as(u8, 1), .c = @get_color(4) } }"
+    )
+
+
+@pytest.mark.parametrize(
+    "data",
+    [
+        {"a:u32": None},
+        {"a:[2]u32": [1]},
+        {"a": [1, 2]},
+        {"a:[2]u32": [[1], [2]]},
+        {"a": 1},
+    ],
+)
+def test_make_csl_data_literal_invalid(data):
     with pytest.raises(ValueError):
-        make_csl_data_literal({"a:u32": value})
+        make_csl_data_literal(data)
 
 
 def test_make_csl_source_embeds_literal():
