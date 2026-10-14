@@ -238,15 +238,12 @@ if __name__ == "__main__":
         reldir = os.getenv("COMPCONF_RELDIR", None)
         logging.info(f"reldir={reldir}")
         import_paths = [
-            (
-                f"./{os.path.relpath(p)}"
-                if (
-                    reldir is not None
-                    and os.path.commonpath([reldir, os.path.abspath(p)])
-                    == reldir
-                )
-                else os.path.abspath(p)
+            f"./{os.path.relpath(p)}"
+            if (
+                reldir is not None
+                and os.path.commonpath([reldir, os.path.abspath(p)]) == reldir
             )
+            else os.path.abspath(p)
             for p in import_paths
         ]
         logging.info(f"import_paths={import_paths}")
