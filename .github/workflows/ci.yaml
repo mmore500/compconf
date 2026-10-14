@@ -157,7 +157,8 @@ jobs:
 
       - name: Compile test kernel
         run: |
-          sudo env PATH=$PATH CSLC=$CSLC ./test/compile.sh  >/dev/null 2>&1
+          sudo env PATH=$PATH CSLC=$CSLC ./test/compile.sh \
+            >compile.log 2>&1 || { tail -n 100 compile.log; exit 1; }
 
       - name: Execute test kernel
         run: |
